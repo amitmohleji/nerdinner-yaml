@@ -1,0 +1,27 @@
+---
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: Applications/NerdDinner
+  type: udm.Application
+  lastVersion: "2.0"
+  children:
+  - name: "2.0"
+    type: udm.DeploymentPackage
+    deployables:
+    - name: NerdDinner-files
+      type: iis.WebContent
+      targetPath: C:\inetpub\nerddinner
+      file: !file "artifacts/Applications/NerdDinner/2.0/NerdDinner-files/NerdDinner-Files"
+    - name: NerdDinner-website
+      type: iis.WebsiteSpec
+      websiteName: NerdDinner
+      physicalPath: C:\inetpub\nerddinner
+      applicationPoolName: NerdDinner-applicationPool
+      bindings:
+      - name: "88"
+        type: iis.WebsiteBindingSpec
+        port: "8080"
+    - name: NerdDinner-applicationPool
+      type: iis.ApplicationPoolSpec
+      managedRuntimeVersion: v4.0
